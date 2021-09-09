@@ -17,15 +17,16 @@ function LineToTool() {
                 startMouseX = mouseX;
                 startMouseY = mouseY;
                 drawing = true;
+
                 //save the current pixel Array
                 loadPixels();
             } else {
                 //update the screen with the saved pixels to hide any previous
                 //shapes between mouse pressed and released
                 updatePixels();
-                //draws the shape
+
+                //draws the shape based on shape selected
                 if (this.shape === "line") {
-                    strokeWeight(this.slider.value());
                     line(startMouseX, startMouseY, mouseX, mouseY);
                 } else if (this.shape === "rect") {
                     rect(
@@ -37,11 +38,21 @@ function LineToTool() {
                 } else if (this.shape === "ellipse") {
                     let difX = mouseX - startMouseX;
                     let difY = mouseY - startMouseY;
+
                     ellipse(
                         startMouseX + difX / 2,
                         startMouseY + difY / 2,
                         difX,
                         difY
+                    );
+                } else if (this.shape === "triangle") {
+                    triangle(
+                        startMouseX + (mouseX - startMouseX) / 2,
+                        startMouseY,
+                        startMouseX,
+                        mouseY,
+                        mouseX,
+                        mouseY
                     );
                 }
             }
@@ -49,6 +60,57 @@ function LineToTool() {
             //save the pixels with the most recent shape and reset the
             //drawing bool and start locations
             loadPixels();
+
+            // Draws shapes to the screen
+            if (this.shape === "line") {
+                layers[currentLayer].draw.push({
+                    func: line,
+                    coords: [startMouseX, startMouseY, mouseX, mouseY],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
+            } else if (this.shape === "rect") {
+                layers[currentLayer].draw.push({
+                    func: rect,
+                    coords: [
+                        startMouseX,
+                        startMouseY,
+                        mouseX - startMouseX,
+                        mouseY - startMouseY,
+                    ],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
+            } else if (this.shape === "ellipse") {
+                let difX = mouseX - startMouseX;
+                let difY = mouseY - startMouseY;
+                layers[currentLayer].draw.push({
+                    func: ellipse,
+                    coords: [
+                        startMouseX + difX / 2,
+                        startMouseY + difY / 2,
+                        difX,
+                        difY,
+                    ],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
+            } else if (this.shape === "triangle") {
+                layers[currentLayer].draw.push({
+                    func: triangle,
+                    coords: [
+                        startMouseX + (mouseX - startMouseX) / 2,
+                        startMouseY,
+                        startMouseX,
+                        mouseY,
+                        mouseX,
+                        mouseY,
+                    ],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
+            }
+
             drawing = false;
             startMouseX = -1;
             startMouseY = -1;
@@ -56,23 +118,22 @@ function LineToTool() {
     };
 
     this.populateOptions = () => {
-        // Shape
+        // Shape options
         select(".options").html(
-            "<button class='shapeOption' data-shape='line'>Line</button><button class='shapeOption' data-shape='rect'>Rectangle</button><button class='shapeOption' data-shape='ellipse'>Ellipse</button>",
+            "<h3>Options</h3><div class='shapeList'><button class='shapeOption' data-shape='line'>&#9586; | Line Tool</button><button class='shapeOption' data-shape='rect'>&#9645; | Rectangle Tool</button><button class='shapeOption' data-shape='ellipse'>&#9711; | Ellipse Tool</button><button class='shapeOption' data-shape='triangle'>&#9651; | Triangle Tool</button></div>",
             true
         );
         const shapes = selectAll(".shapeOption");
+
+        // Changes selected shape on click
         shapes.forEach((shape) => {
             shape.mouseClicked(() => {
                 this.shape = shape.attribute("data-shape");
             });
         });
-
-        // Stroke weight
-        this.slider = createSlider(1, 50, 1);
-        this.slider.parent(select(".options"));
     };
     this.unselectTool = () => {
+        // Clear options
         select(".options").html("");
     };
 }

@@ -1,18 +1,25 @@
 function SprayCanTool() {
+    //set an icon and a name for the object
     this.name = "sprayCanTool";
-    this.icon = "assets/sprayCan.jpg";
+    this.icon = "assets/sprayCan.png";
 
+    // Variables for point number and spread
     var points = 13;
     var spread = 10;
 
     this.draw = function () {
-        var r = random(5, 10);
         if (mouseIsPressed) {
             for (var i = 0; i < points; i++) {
-                point(
-                    random(mouseX - spread, mouseX + spread),
-                    random(mouseY - spread, mouseY + spread)
-                );
+                // Draws points in random coords around cursor
+                layers[currentLayer].draw.push({
+                    func: point,
+                    coords: [
+                        random(mouseX - spread, mouseX + spread),
+                        random(mouseY - spread, mouseY + spread),
+                    ],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
             }
         }
     };

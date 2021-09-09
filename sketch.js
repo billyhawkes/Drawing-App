@@ -1,9 +1,17 @@
 //global variables that will store the toolbox colour palette
 //amnd the helper functions
-var toolbox = null;
-var colourP = null;
-let pixelSize = null;
-var helpers = null;
+let toolbox = null;
+let colourP = null;
+let currentColor = "black";
+let pixelSize = 1;
+let helpers = null;
+let currentLayer = 0;
+let layers = [
+    { visible: true, draw: [] },
+    { visible: true, draw: [] },
+    { visible: true, draw: [] },
+    { visible: true, draw: [] },
+];
 
 function setup() {
     //create a canvas to fill the content div from index.html
@@ -18,11 +26,16 @@ function setup() {
     helpers = new HelperFunctions();
     colourP = new ColourPalette();
 
+    //load pixelSize tool
+    new PixelSize();
+    new Layers();
+
     //create a toolbox for storing the tools
     toolbox = new Toolbox();
 
     //add the tools to the toolbox.
     toolbox.addTool(new FreehandTool());
+    toolbox.addTool(new EraserTool());
     toolbox.addTool(new LineToTool());
     toolbox.addTool(new SprayCanTool());
     toolbox.addTool(new mirrorDrawTool());
@@ -30,13 +43,26 @@ function setup() {
 }
 
 function draw() {
-    //call the draw function from the selected tool.
-    //hasOwnProperty is a javascript function that tests
-    //if an object contains a particular method or property
-    //if there isn't a draw method the app will alert the user
+    // Clears screen
+    clear();
+
+    // Draws each layer
+    for (let i = 3; i >= 0; i--) {
+        if (layers[i].visible) {
+            // Draws layer shapes if visible
+            for (let j = 0; j < layers[i].draw.length; j++) {
+                stroke(layers[i].draw[j].colour);
+                fill(layers[i].draw[j].colour);
+                strokeWeight(layers[i].draw[j].size);
+                layers[i].draw[j].func(...layers[i].draw[j].coords);
+            }
+        }
+    }
     if (toolbox.selectedTool.hasOwnProperty("draw")) {
+        // Draws selected tools
         toolbox.selectedTool.draw();
     } else {
+        // Alerts if no tool selected
         alert("it doesn't look like your tool has a draw method!");
     }
 }

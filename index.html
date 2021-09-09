@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="lib/p5.min.js"></script>
-        <script src="lib/p5.dom.js"></script>
 
-        <script src="sketch.js"></script>
+<head>
+    <script src="lib/p5.min.js"></script>
+    <script src="lib/p5.dom.js"></script>
 
-        <!-- add extra scripts below -->
-        <script src="toolbox.js"></script>
-        <script src="colourPalette.js"></script>
-        <script src="helperFunctions.js"></script>
+    <script src="sketch.js"></script>
 
-        <script src="freehandTool.js"></script>
-        <script src="shapesTool.js"></script>
-        <script src="sprayCanTool.js"></script>
-        <script src="mirrorDrawTool.js"></script>
+    <!-- add extra scripts below -->
+    <script src="toolbox.js"></script>
+    <script src="colourPalette.js"></script>
+    <script src="helperFunctions.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="style.css" />
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="box header">
-                My Drawing App
-                <button id="clearButton">Clear</button>
-                <button id="saveImageButton">Save Image</button>
-            </div>
-            <div class="box" id="sidebar"></div>
-            <div id="content"></div>
-            <div class="box colourPalette"></div>
-            <div class="box options"></div>
+    <script src="freehandTool.js"></script>
+    <script src="eraserTool.js"></script>
+    <script src="shapesTool.js"></script>
+    <script src="sprayCanTool.js"></script>
+    <script src="mirrorDrawTool.js"></script>
+    <script src="pixelSize.js"></script>
+    <script src="layers.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <button id="clearButton">Clear</button>
+            <h1>Sketchalot</h1>
+            <button id="saveImageButton">Save Image</button>
         </div>
-    </body>
+        <div id="sidebar"></div>
+        <div id="content"></div>
+        <footer>
+            <div class="staticOptions">
+                <div class="colourPalette"></div>
+                <div class="pixelSize">
+                    <div>
+                        <h3>Brush Size:</h3>
+                        <p id="numPixels">1px</p>
+                    </div>
+                </div>
+                <div class="layers">
+                    <div>
+                        <h3>Layer: </h3>
+                        <p class="numLayers">1</p>
+                    </div>
+                </div>
+            </div>
+            <div class="options"></div>
+        </footer>
+    </div>
+</body>
+
 </html>

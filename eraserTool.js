@@ -1,7 +1,7 @@
-function FreehandTool() {
+function EraserTool() {
     //set an icon and a name for the object
-    this.icon = "assets/freehand.png";
-    this.name = "freehand";
+    this.icon = "assets/eraserTool.png";
+    this.name = "eraser";
 
     //to smoothly draw we'll draw a line from the previous mouse location
     //to the current mouse location. The following values store
@@ -22,11 +22,12 @@ function FreehandTool() {
             //if we already have values for previousX and Y we can draw a line from
             //there to the current mouse location
             else {
+                // Draws with default colour white (background)
                 layers[currentLayer].draw.push({
                     func: line,
                     coords: [previousMouseX, previousMouseY, mouseX, mouseY],
                     size: pixelSize,
-                    colour: currentColor,
+                    colour: "white",
                 });
                 previousMouseX = mouseX;
                 previousMouseY = mouseY;
@@ -39,5 +40,10 @@ function FreehandTool() {
             previousMouseX = -1;
             previousMouseY = -1;
         }
+    };
+
+    this.unselectTool = () => {
+        // Resets stroke colour
+        stroke(currentColor);
     };
 }

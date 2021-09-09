@@ -1,6 +1,6 @@
 function mirrorDrawTool() {
     this.name = "mirrorDraw";
-    this.icon = "assets/mirrorDraw.jpg";
+    this.icon = "assets/mirrorDraw.png";
 
     //which axis is being mirrored (x or y) x is default
     this.axis = "x";
@@ -38,6 +38,13 @@ function mirrorDrawTool() {
             //if there are values in the previous locations
             //draw a line between them and the current positions
             else {
+                // Draws current side
+                layers[currentLayer].draw.push({
+                    func: line,
+                    coords: [previousMouseX, previousMouseY, mouseX, mouseY],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
                 line(previousMouseX, previousMouseY, mouseX, mouseY);
                 previousMouseX = mouseX;
                 previousMouseY = mouseY;
@@ -46,6 +53,18 @@ function mirrorDrawTool() {
                 //line of symmetry
                 var oX = this.calculateOpposite(mouseX, "x");
                 var oY = this.calculateOpposite(mouseY, "y");
+                // Draws opposite side
+                layers[currentLayer].draw.push({
+                    func: line,
+                    coords: [
+                        previousOppositeMouseX,
+                        previousOppositeMouseY,
+                        oX,
+                        oY,
+                    ],
+                    size: pixelSize,
+                    colour: currentColor,
+                });
                 line(previousOppositeMouseX, previousOppositeMouseY, oX, oY);
                 previousOppositeMouseX = oX;
                 previousOppositeMouseY = oY;
@@ -118,7 +137,7 @@ function mirrorDrawTool() {
     //toggle the line of symmetry between horizonatl to vertical
     this.populateOptions = function () {
         select(".options").html(
-            "<button id='directionButton'>Make Horizontal</button>"
+            "<h3>Options</h3><button id='directionButton'>Make Horizontal</button>"
         );
         // 	//click handler
         select("#directionButton").mouseClicked(function () {
